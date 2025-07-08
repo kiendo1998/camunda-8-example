@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  xmlns:zeebe="http://camunda.org/schema/zeebe/1.0"
+                  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                  id="Definitions_1"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+
+
+  <bpmn:process id="car_booking" name="Car Booking Request" isExecutable="true">
+    <bpmn:startEvent id="StartEvent" />
+
+    <bpmn:userTask id="SubmitRequest" name="Nhập yêu cầu đặt xe" zeebe:assignmentDefinition="${requester}" />
+    <bpmn:exclusiveGateway id="RoleCheck" name="Kiểm tra role" />
+
+    <bpmn:userTask id="ApproveByHead" name="Trưởng phòng duyệt" zeebe:assignmentDefinition="head" />
+    <bpmn:userTask id="ApproveByDirector" name="Giám đốc duyệt" zeebe:assignmentDefinition="director" />
+    <bpmn:userTask id="OnlyDirectorApproval" name="Giám đốc duyệt" zeebe:assignmentDefinition="director" />
+
+    <bpmn:serviceTask id="AutoApprove" name="Tự động duyệt">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="auto-approve" />
+      </bpmn:extensionElements>
+    </bpmn:serviceTask>
+
+    <bpmn:endEvent id="EndEvent" />
+
+    <bpmn:sequenceFlow sourceRef="StartEvent" targetRef="SubmitRequest" />
+    <bpmn:sequenceFlow sourceRef="SubmitRequest" targetRef="RoleCheck" />
+
+    <bpmn:sequenceFlow id="flow_guard" sourceRef="RoleCheck" targetRef="ApproveByHead">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[=role = "guard"]]></bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+
+    <bpmn:sequenceFlow sourceRef="ApproveByHead" targetRef="ApproveByDirector" />
+    <bpmn:sequenceFlow sourceRef="ApproveByDirector" targetRef="EndEvent" />
+
+    <bpmn:sequenceFlow id="flow_staff" sourceRef="RoleCheck" targetRef="OnlyDirectorApproval">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[=role = "staff" or role = "head"]]></bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow sourceRef="OnlyDirectorApproval" targetRef="EndEvent" />
+
+    <bpmn:sequenceFlow id="flow_director" sourceRef="RoleCheck" targetRef="AutoApprove">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[=role = "director"]]></bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow sourceRef="AutoApprove" targetRef="EndEvent" />
+  </bpmn:process>
+</bpmn:definitions>
