@@ -73,7 +73,7 @@
     <bpmn:sequenceFlow id="Flow_1t32hvz" sourceRef="guardCheck" targetRef="OnlyDirectorApproval">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=completedBy = "head"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:exclusiveGateway id="Gateway_0pswo4t" name="Kiểm tra người phê duyệt">
+    <bpmn:exclusiveGateway id="Gateway_0pswo4t" name="Kiểm tra phê duyệt hay không">
       <bpmn:incoming>Flow_0b6qun8</bpmn:incoming>
       <bpmn:outgoing>Flow_0ahz7r4</bpmn:outgoing>
       <bpmn:outgoing>Flow_060r0nw</bpmn:outgoing>
@@ -189,12 +189,6 @@
           <dc:Bounds x="691" y="152" width="81" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0pswo4t_di" bpmnElement="Gateway_0pswo4t" isMarkerVisible="true">
-        <dc:Bounds x="965" y="555" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="954" y="612" width="74" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0tr5j91_di" bpmnElement="EndEvent">
         <dc:Bounds x="1512" y="392" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -232,6 +226,12 @@
       <bpmndi:BPMNShape id="Activity_09e6vjb_di" bpmnElement="OnlyDirectorApproval">
         <dc:Bounds x="530" y="520" width="100" height="80" />
         <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0pswo4t_di" bpmnElement="Gateway_0pswo4t" isMarkerVisible="true">
+        <dc:Bounds x="965" y="555" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="951" y="612" width="81" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_0hnmpsw_di" bpmnElement="Association_0hnmpsw">
         <di:waypoint x="470" y="700" />

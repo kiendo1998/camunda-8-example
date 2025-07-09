@@ -2,6 +2,7 @@ package org.example.controller;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.camunda.zeebe.client.ZeebeClient;
 import io.camunda.zeebe.client.api.command.CreateProcessInstanceCommandStep1;
 import io.camunda.zeebe.client.api.response.ProcessInstanceEvent;
@@ -230,6 +231,43 @@ public class BookingController {
             }
         }
     }
+    @PostMapping("/get-tasks")
+    public ResponseEntity<Object> getTasks(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody Map<String, Object> requestBody
+    ) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.badRequest().body("Authorization header (Bearer token) is required");
+        }
+        String accessToken = authorizationHeader.substring(7); // Bỏ "Bearer "
+
+        DecodedJWT jwt = JWT.decode(accessToken);
+        List<String> userGroups = jwt.getClaim("groups").asList(String.class);
+        requestBody.put("candidateGroup", userGroups.get(0));
+        String url = "http://localhost:8082/v1/tasks/search";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(accessToken);
+
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+
+        try {
+            // Nhận về chuỗi JSON
+            ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
+
+            // Nếu muốn parse chuỗi JSON thành Map (hoặc trả nguyên chuỗi luôn)
+            ObjectMapper objectMapper = new ObjectMapper();
+            Object json = objectMapper.readValue(response.getBody(), Object.class);
+
+            return ResponseEntity.status(response.getStatusCode()).body(json);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to call Task Search API: " + e.getMessage());
+        }
+    }
+
 
 
 
