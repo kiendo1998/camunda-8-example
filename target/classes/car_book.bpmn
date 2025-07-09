@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_13dgoiq" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.36.1" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
   <bpmn:process id="book_approval" isExecutable="true">
-    <bpmn:startEvent id="StartEvent">
+    <bpmn:startEvent id="StartEvent" name="Bắt đầu luồng">
       <bpmn:outgoing>Flow_14ed64u</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_14ed64u" sourceRef="StartEvent" targetRef="RoleCheck" />
-    <bpmn:exclusiveGateway id="RoleCheck">
+    <bpmn:exclusiveGateway id="RoleCheck" name="Kiểm tra role">
       <bpmn:incoming>Flow_14ed64u</bpmn:incoming>
       <bpmn:outgoing>Flow_0bhvqob</bpmn:outgoing>
       <bpmn:outgoing>Flow_05ih6fl</bpmn:outgoing>
@@ -37,7 +37,7 @@
     <bpmn:sequenceFlow id="Flow_05ih6fl" sourceRef="RoleCheck" targetRef="ApproveByHead">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=role = "employee"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:endEvent id="EndEvent" name="">
+    <bpmn:endEvent id="EndEvent" name="Phê duyệt thành công">
       <bpmn:extensionElements>
         <zeebe:ioMapping>
           <zeebe:output source="=&#34;success&#34;" target="result" />
@@ -61,7 +61,7 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=role = "director"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0zt4im0" sourceRef="AutoApprove" targetRef="EndEvent" />
-    <bpmn:exclusiveGateway id="guardCheck">
+    <bpmn:exclusiveGateway id="guardCheck" name="Kiểm tra người phê duyệt">
       <bpmn:incoming>Flow_0ilvz7n</bpmn:incoming>
       <bpmn:outgoing>Flow_0mi5e5d</bpmn:outgoing>
       <bpmn:outgoing>Flow_1t32hvz</bpmn:outgoing>
@@ -73,7 +73,7 @@
     <bpmn:sequenceFlow id="Flow_1t32hvz" sourceRef="guardCheck" targetRef="OnlyDirectorApproval">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=completedBy = "head"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:exclusiveGateway id="Gateway_0pswo4t">
+    <bpmn:exclusiveGateway id="Gateway_0pswo4t" name="Kiểm tra người phê duyệt">
       <bpmn:incoming>Flow_0b6qun8</bpmn:incoming>
       <bpmn:outgoing>Flow_0ahz7r4</bpmn:outgoing>
       <bpmn:outgoing>Flow_060r0nw</bpmn:outgoing>
@@ -81,7 +81,7 @@
     <bpmn:sequenceFlow id="Flow_0ahz7r4" sourceRef="Gateway_0pswo4t" targetRef="EndEvent">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=approve = "true"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:exclusiveGateway id="Gateway_04vdf26">
+    <bpmn:exclusiveGateway id="Gateway_04vdf26" name="Kiểm tra phê duyệt hay không">
       <bpmn:incoming>Flow_1u0y8nv</bpmn:incoming>
       <bpmn:outgoing>Flow_0ilvz7n</bpmn:outgoing>
       <bpmn:outgoing>Flow_1flm2yu</bpmn:outgoing>
@@ -107,13 +107,13 @@
     <bpmn:sequenceFlow id="Flow_14ftymu" sourceRef="RoleCheck" targetRef="ApproveByEmployee">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=role = "guard"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:exclusiveGateway id="Gateway_0ibezad">
+    <bpmn:exclusiveGateway id="Gateway_0ibezad" name="kiểm tra phê duyệt hay">
       <bpmn:incoming>Flow_0wcs07f</bpmn:incoming>
       <bpmn:outgoing>Flow_1mduoa2</bpmn:outgoing>
       <bpmn:outgoing>Flow_1rbrvtj</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0wcs07f" sourceRef="ApproveByEmployee" targetRef="Gateway_0ibezad" />
-    <bpmn:exclusiveGateway id="Gateway_0ap5gad">
+    <bpmn:exclusiveGateway id="Gateway_0ap5gad" name="Kiểm tra người phê duyệt">
       <bpmn:incoming>Flow_1mduoa2</bpmn:incoming>
       <bpmn:outgoing>Flow_0hld04t</bpmn:outgoing>
       <bpmn:outgoing>Flow_14fbal8</bpmn:outgoing>
@@ -122,7 +122,7 @@
     <bpmn:sequenceFlow id="Flow_1mduoa2" sourceRef="Gateway_0ibezad" targetRef="Gateway_0ap5gad">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=approve = "true"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:endEvent id="Event_1rcy8nh">
+    <bpmn:endEvent id="Event_1rcy8nh" name="Từ chối duyệt">
       <bpmn:extensionElements>
         <zeebe:ioMapping>
           <zeebe:output source="=&#34;reject&#34;" target="result" />
@@ -160,22 +160,20 @@
       <bpmn:text>Bảo vệ</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_18lv5iq" associationDirection="None" sourceRef="Flow_14ftymu" targetRef="TextAnnotation_1gv2jf8" />
-    <bpmn:textAnnotation id="TextAnnotation_1lgxmvd">
-      <bpmn:text>Sucess</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_1fwk01k" associationDirection="None" sourceRef="EndEvent" targetRef="TextAnnotation_1lgxmvd" />
-    <bpmn:textAnnotation id="TextAnnotation_1a42ebj">
-      <bpmn:text>Reject</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_197xhse" associationDirection="None" sourceRef="Event_1rcy8nh" targetRef="TextAnnotation_1a42ebj" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="book_approval">
       <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent">
         <dc:Bounds x="182" y="232" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="166" y="275" width="68" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0w2ipck_di" bpmnElement="RoleCheck" isMarkerVisible="true">
         <dc:Bounds x="425" y="225" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="499" y="240" width="63" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1g7bsxk_di" bpmnElement="AutoApprove">
         <dc:Bounds x="530" y="660" width="100" height="80" />
@@ -187,24 +185,45 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0ibezad_di" bpmnElement="Gateway_0ibezad" isMarkerVisible="true">
         <dc:Bounds x="705" y="95" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="701" y="152" width="61" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0pswo4t_di" bpmnElement="Gateway_0pswo4t" isMarkerVisible="true">
         <dc:Bounds x="965" y="555" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="954" y="612" width="74" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0tr5j91_di" bpmnElement="EndEvent">
         <dc:Bounds x="1512" y="392" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1563" y="400" width="81" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1rcy8nh_di" bpmnElement="Event_1rcy8nh">
         <dc:Bounds x="892" y="782" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="876" y="825" width="68" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0ap5gad_di" bpmnElement="Gateway_0ap5gad" isMarkerVisible="true">
         <dc:Bounds x="1215" y="95" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1203" y="65" width="74" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1nps1q3_di" bpmnElement="guardCheck" isMarkerVisible="true">
         <dc:Bounds x="1025" y="425" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1013" y="482" width="74" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_04vdf26_di" bpmnElement="Gateway_04vdf26" isMarkerVisible="true">
         <dc:Bounds x="765" y="335" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="750" y="305" width="81" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_08re256_di" bpmnElement="ApproveByHead">
         <dc:Bounds x="530" y="310" width="100" height="80" />
@@ -230,14 +249,6 @@
         <di:waypoint x="490" y="560" />
         <di:waypoint x="410" y="517" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_1fwk01k_di" bpmnElement="Association_1fwk01k">
-        <di:waypoint x="1541" y="396" />
-        <di:waypoint x="1588" y="340" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_197xhse_di" bpmnElement="Association_197xhse">
-        <di:waypoint x="928" y="800" />
-        <di:waypoint x="1060" y="800" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="TextAnnotation_0y22gp7_di" bpmnElement="TextAnnotation_0y22gp7">
         <dc:Bounds x="430" y="720" width="99.99156545209178" height="29.995360998650472" />
         <bpmndi:BPMNLabel />
@@ -252,10 +263,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_11nponk_di" bpmnElement="TextAnnotation_11nponk">
         <dc:Bounds x="330" y="490" width="99.99156545209178" height="26.990553306342782" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_1lgxmvd_di" bpmnElement="TextAnnotation_1lgxmvd">
-        <dc:Bounds x="1550" y="310" width="99.99156545209178" height="29.995360998650472" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_14ed64u_di" bpmnElement="Flow_14ed64u">
@@ -360,10 +367,6 @@
         <di:waypoint x="1530" y="120" />
         <di:waypoint x="1530" y="392" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="TextAnnotation_1a42ebj_di" bpmnElement="TextAnnotation_1a42ebj">
-        <dc:Bounds x="1060" y="785" width="99.99156545209178" height="29.995360998650472" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>
