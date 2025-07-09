@@ -18,12 +18,16 @@ public class CarRequest {
 
     private String carName; // Ví dụ: Toyota
 
-    private LocalDate startDate; // Ngày đi
+    private String startDate; // Ngày đi
 
-    private LocalDate endDate; // Ngày về
+    private String endDate; // Ngày về
 
     @Column(length = 500)
     private String purpose; // Mục đích sử dụng xe
 
     private String status; // pending, approved, rejected (nếu cần workflow)
+    private Long processInstanceKey;
+    private String bpmnProcessId;
+    private Long processDefinitionKey;
+    private int version;
 }
